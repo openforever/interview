@@ -1,0 +1,9 @@
+1.给定一个二叉树和一个值，判定这个二叉树是否存在一条由根到叶子结点的路径结点只和=给定值
+public boolean isExisted(TreeNode node, int target){
+	if (node == null && target == 0) 
+		return true;
+	if (node == null && target != 0)
+		return false;
+	int newTarget = target - node.value;
+	return (isExisted(node.left, newTarget) || isExisted(node.right, newTarget))
+}
