@@ -21,6 +21,32 @@
 而所有的线程共享共享同一进程的相同的内存空间(进程代码段，进程的公有数据).
 	每个线程都拥有独立的堆栈，程序计数器和自己的局部变量但不拥有系统资源。线程执行是抢占式的
 
+5. java中怎么实现线程?
+	java.lang.Thread的实例就是一个线程，Thread类实现了Runnable接口
+	java只支持单继承，使用Runnable还可以继承其他类
+	①:继承Thread类，重写run方法(线程需要完成的任务,线程执行体)，多个线程之间无法共享线程类的实例变量
+		主线程的执行体不是由run确定的，而是由main方法确定的
+		获取当前Thread对象： this
+	②：实现Runnable接口，一Runnable实现类的对象作为Thread的target来创建Thread对象,可以共享线程类的实例
+		实际的线程对象任然是Thread实例，只是该Thread线程负责执行target的run方法
+		获取当前Thread对象： Thread.CurrentThread
+	③：使用Callable和Future创建线程
+		java5，提供了Callable接口，call方法作为线程执行体，比run更强大：
+			call方法有返回值
+			call方法可以声明抛出异常
+		Callable接口并不是Runnable接口的子接口，所以Callable对象不能直接作为Thread的target。Future
+	接口代表Callable接口中call方法的返回值，提供了一个FutureTask实现类，该实现类实现了Future接口和
+	Runnable接口，可作为Thread类的target
+		Callable接口有泛型限制，接口里的泛型形参类型与call方法的返回值类型相同
+		创建并启动有返回值的线程的步骤：
+		①：创建Callable接口的实现类，并实现call方法作为线程执行体，有返回值
+		②：创建Callable实现类的实例，使用FutureTask类来包装Callable对象，封装了该Callable对象的call
+	方法的返回值
+		③：使用FutureTask对象作为Thread对象的target创建并启动新线程
+		④：调用FutureTask对象的get(阻塞方法，可以指定超时时间)方法获得子线程执行结束后的返回值
+
+6. start和run方法
+	start用来启动新创建的线程，内部调用了run方法，直接调用run方法不会自动新线程，只是会在原线程中执行
 
 
 	
