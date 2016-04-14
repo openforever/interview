@@ -14,3 +14,16 @@ bitmap: 用每一位来存放某种状态，适合大规模数据，但数据状
 说明元素重复。
 	位图法：给新数组初始化时置0，然后置1的做法类似于位图的处理方法，故称为位图法
 	最坏2N，先找到最大值
+
+3. 用bitmap进行整型数组的排序
+	①：遍历一遍，找到数组的最值max，min
+	②：创建bitmap数组 new int[max - min + 1]
+	③：再遍历一遍，用index = i - min，newArr[index]++ 统计数组中元素出现的次数
+	④：重新调整数组元素的位置
+	int index = 0;
+	for (int i = 0; i < newArr.length; i++){
+		while (newArr[i] > 0){
+			arr[index++] = i + min;
+			newArr[i]--;
+		}
+	}
